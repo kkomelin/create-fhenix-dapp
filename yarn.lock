@@ -1122,9 +1122,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"create-eth@workspace:.":
+"create-fhenix-dapp@workspace:.":
   version: 0.0.0-use.local
-  resolution: "create-eth@workspace:."
+  resolution: "create-fhenix-dapp@workspace:."
   dependencies:
     "@changesets/cli": ^2.26.2
     "@rollup/plugin-typescript": 11.1.0
@@ -1146,7 +1146,7 @@ __metadata:
     tslib: 2.5.0
     typescript: 5.0.4
   bin:
-    create-eth: bin/create-dapp-se2.js
+    create-fhenix-dapp: bin/create-dapp-fhenix.js
   languageName: unknown
   linkType: soft
 

@@ -1,26 +1,27 @@
 {
-  "name": "create-eth",
-  "version": "0.0.35",
-  "description": "Create a Scaffold-ETH-2 app",
+  "name": "create-fhenix-dapp",
+  "version": "0.0.0",
+  "description": "Create Fhenix DApp",
   "repository": {
     "type": "git",
-    "url": "https://github.com/scaffold-eth/scaffold-eth-2.git"
+    "url": "https://github.com/kkomelin/create-fhenix-dapp.git"
   },
   "main": "dist/cli.js",
   "type": "module",
-  "bin": "bin/create-dapp-se2.js",
+  "bin": "bin/create-dapp-fhenix.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "build-run": "yarn build && yarn cli",
     "dev": "rollup -c rollup.config.js --watch",
-    "cli": "node bin/create-dapp-se2.js",
+    "cli": "node bin/create-dapp-fhenix.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "changeset:release": "yarn build && changeset publish"
   },
   "keywords": [
     "cli",
     "ethereum",
-    "scaffold-eth 2",
+    "fhenix",
+    "create-fhenix-dapp",
     "wagmi",
     "hardhat",
     "viem",
