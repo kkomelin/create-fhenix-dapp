@@ -13,7 +13,7 @@ import { extensionDict } from "./extensions-tree";
 
 // default values for unspecified args
 const defaultOptions: RawOptions = {
-  project: "my-dapp-example",
+  project: "my-fhenix-dapp-example",
   install: true,
   dev: false,
   extensions: [],

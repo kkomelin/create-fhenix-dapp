@@ -30,7 +30,7 @@ export async function createProject(options: Options) {
       task: () => createProjectDirectory(options.project),
     },
     {
-      title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
+      title: `🚀 Creating a new Fhenix DApp app in ${chalk.green.bold(
         options.project
       )}`,
       task: () =>

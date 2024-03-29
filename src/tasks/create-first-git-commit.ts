@@ -29,7 +29,7 @@ export async function createFirstGitCommit(
     await execa("git", ["add", "-A"], { cwd: targetDir });
     await execa(
       "git",
-      ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"],
+      ["commit", "-m", "Initial commit with Create Fhenix DApp", "--no-verify"],
       { cwd: targetDir }
     );
   } catch (e: any) {

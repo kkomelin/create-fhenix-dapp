@@ -29,7 +29,7 @@ export async function renderOutroMessage(options: Options) {
   `;
 
   message += `
-  ${chalk.bold.green("Thanks for using Scaffold-ETH 2 🙏, Happy Building!")}
+  ${chalk.bold.green("Thanks for using Create Fhenix DApp 🙏, Happy Building!")}
   `;
 
   console.log(message);
