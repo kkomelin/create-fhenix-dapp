@@ -1,19 +1,19 @@
 {
   "scripts": {
-    "account": "yarn workspace @se-2/hardhat account",
-    "chain": "yarn workspace @se-2/hardhat chain",
-    "fork": "yarn workspace @se-2/hardhat fork",
-    "deploy": "yarn workspace @se-2/hardhat deploy",
-    "verify": "yarn workspace @se-2/hardhat verify",
-    "hardhat-verify": "yarn workspace @se-2/hardhat hardhat-verify",
-    "compile": "yarn workspace @se-2/hardhat compile",
-    "generate": "yarn workspace @se-2/hardhat generate",
-    "hardhat:lint": "yarn workspace @se-2/hardhat lint",
-    "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
-    "hardhat:format": "yarn workspace @se-2/hardhat format",
-    "hardhat:test": "yarn workspace @se-2/hardhat test",
+    "account": "yarn workspace @cfda/hardhat account",
+    "chain": "yarn workspace @cfda/hardhat chain",
+    "fork": "yarn workspace @cfda/hardhat fork",
+    "deploy": "yarn workspace @cfda/hardhat deploy",
+    "verify": "yarn workspace @cfda/hardhat verify",
+    "hardhat-verify": "yarn workspace @cfda/hardhat hardhat-verify",
+    "compile": "yarn workspace @cfda/hardhat compile",
+    "generate": "yarn workspace @cfda/hardhat generate",
+    "hardhat:lint": "yarn workspace @cfda/hardhat lint",
+    "hardhat:lint-staged": "yarn workspace @cfda/hardhat lint-staged",
+    "hardhat:format": "yarn workspace @cfda/hardhat format",
+    "hardhat:test": "yarn workspace @cfda/hardhat test",
     "test": "yarn hardhat:test",
-    "flatten": "yarn workspace @se-2/hardhat flatten",
+    "flatten": "yarn workspace @cfda/hardhat flatten",
     "format": "yarn next:format && yarn hardhat:format"
   }
 }
