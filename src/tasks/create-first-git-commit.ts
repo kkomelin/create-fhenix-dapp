@@ -1,6 +1,5 @@
 import { execa } from "execa";
 import { Options } from "../types";
-import path from "path";
 
 // Checkout the latest release tag in a git submodule
 async function checkoutLatestTag(submodulePath: string): Promise<void> {
@@ -26,73 +25,13 @@ export async function createFirstGitCommit(
   options: Options
 ) {
   try {
-    // TODO: Move the logic for adding submodules to tempaltes
-    if (options.extensions?.includes("foundry")) {
-      const foundryWorkSpacePath = path.resolve(
-        targetDir,
-        "packages",
-        "foundry"
-      );
-      await execa(
-        "git",
-        [
-          "submodule",
-          "add",
-          "https://github.com/foundry-rs/forge-std",
-          "lib/forge-std",
-        ],
-        {
-          cwd: foundryWorkSpacePath,
-        }
-      );
-      await execa(
-        "git",
-        [
-          "submodule",
-          "add",
-          "https://github.com/OpenZeppelin/openzeppelin-contracts",
-          "lib/openzeppelin-contracts",
-        ],
-        {
-          cwd: foundryWorkSpacePath,
-        }
-      );
-      await execa(
-        "git",
-        [
-          "submodule",
-          "add",
-          "https://github.com/gnsps/solidity-bytes-utils",
-          "lib/solidity-bytes-utils",
-        ],
-        {
-          cwd: foundryWorkSpacePath,
-        }
-      );
-      await execa("git", ["submodule", "update", "--init", "--recursive"], {
-        cwd: foundryWorkSpacePath,
-      });
-      await checkoutLatestTag(
-        path.resolve(foundryWorkSpacePath, "lib", "forge-std")
-      );
-      await checkoutLatestTag(
-        path.resolve(foundryWorkSpacePath, "lib", "openzeppelin-contracts")
-      );
-    }
-
+    // TODO: Move the logic for adding submodules to templates
     await execa("git", ["add", "-A"], { cwd: targetDir });
     await execa(
       "git",
       ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"],
       { cwd: targetDir }
     );
-
-    // Update the submodule, since we have checked out the latest tag in the previous step of foundry
-    if (options.extensions?.includes("foundry")) {
-      await execa("git", ["submodule", "update", "--init", "--recursive"], {
-        cwd: path.resolve(targetDir, "packages", "foundry"),
-      });
-    }
   } catch (e: any) {
     // cast error as ExecaError to get stderr
 

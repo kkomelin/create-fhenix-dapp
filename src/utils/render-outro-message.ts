@@ -1,6 +1,5 @@
-import type { Options } from "../types";
 import chalk from "chalk";
-import { execa } from "execa";
+import type { Options } from "../types";
 
 export async function renderOutroMessage(options: Options) {
   let message = `
@@ -12,27 +11,11 @@ export async function renderOutroMessage(options: Options) {
   ${chalk.dim("cd")} ${options.project}
   `;
 
-  if (
-    options.extensions.includes("hardhat") ||
-    options.extensions.includes("foundry")
-  ) {
+  if (options.extensions.includes("hardhat")) {
     message += `
     \t${chalk.bold("Start the local development node")}
     \t${chalk.dim("yarn")} chain
     `;
-
-    if (options.extensions.includes("foundry")) {
-      try {
-        await execa("foundryup", ["-h"]);
-      } catch (error) {
-        message += `
-      \t${chalk.bold.yellow(
-        "(NOTE: Foundryup is not installed in your system)"
-      )}
-      \t${chalk.dim("Checkout: https://getfoundry.sh")}
-      `;
-      }
-    }
 
     message += `
     \t${chalk.bold("In a new terminal window, deploy your contracts")}

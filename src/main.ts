@@ -1,16 +1,16 @@
-import {
-  copyTemplateFiles,
-  createProjectDirectory,
-  installPackages,
-  createFirstGitCommit,
-  prettierFormat,
-} from "./tasks";
-import type { Options } from "./types";
-import { renderOutroMessage } from "./utils/render-outro-message";
 import chalk from "chalk";
 import Listr from "listr";
 import path from "path";
 import { fileURLToPath } from "url";
+import {
+  copyTemplateFiles,
+  createFirstGitCommit,
+  createProjectDirectory,
+  installPackages,
+  prettierFormat,
+} from "./tasks";
+import type { Options } from "./types";
+import { renderOutroMessage } from "./utils/render-outro-message";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -55,9 +55,7 @@ export async function createProject(options: Options) {
       },
     },
     {
-      title: `📡 Initializing Git repository ${
-        options.extensions.includes("foundry") ? "and submodules" : ""
-      }`,
+      title: `📡 Initializing Git repository`,
       task: () => createFirstGitCommit(targetDirectory, options),
     },
   ]);
