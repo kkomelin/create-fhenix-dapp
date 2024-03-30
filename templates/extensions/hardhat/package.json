@@ -1,7 +1,9 @@
 {
   "scripts": {
     "account": "pnpm --filter backend account",
-    "chain": "pnpm --filter backend chain",
+    "chain:start": "pnpm --filter backend chain:start",
+    "chain:stop": "pnpm --filter backend chain:stop",
+    "chain:faucet": "pnpm --filter backend chain:faucet",
     "fork": "pnpm --filter backend fork",
     "deploy:contracts": "pnpm --filter backend deploy:contracts",
     "verify": "pnpm --filter backend verify",
@@ -14,6 +16,7 @@
     "hardhat:test": "pnpm --filter backend test",
     "test": "pnpm hardhat:test",
     "flatten": "pnpm --filter backend flatten",
-    "format": "pnpm next:format && pnpm hardhat:format"
+    "format": "pnpm next:format && pnpm hardhat:format",
+    "backend:clear":  "pnpm --filter backend clear"
   }
 }

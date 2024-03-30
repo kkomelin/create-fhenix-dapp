@@ -1,6 +1,8 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployFunction } from "hardhat-deploy/types";
 import { Contract } from "ethers";
+import { DeployFunction } from "hardhat-deploy/types";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+
+const CONTRACT_NAME = "Counter";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -22,7 +24,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("YourContract", {
+  await deploy(CONTRACT_NAME, {
     from: deployer,
     // Contract constructor arguments
     args: [deployer],
@@ -33,12 +35,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
 
   // Get the deployed contract to interact with it after deploying.
-  const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  console.log("👋 Initial greeting:", await yourContract.greeting());
+  const yourContract = await hre.ethers.getContract<Contract>(CONTRACT_NAME, deployer);
+  console.log("👋 Initial counter value:", Number(await yourContract.getCounter()));
 };
 
 export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];
+deployYourContract.tags = [CONTRACT_NAME];
