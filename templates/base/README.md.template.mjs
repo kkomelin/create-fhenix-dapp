@@ -4,17 +4,19 @@ const getQuickStart = ({
   solidityFramework,
   networkConfigPath,
   contractsPath,
+  frontendScaffoldConfigPath,
+  frontendAppPagePath,
   scriptsPath,
   testCommand,
 }) => `## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+To get started with Create Fhenix DApp, follow the steps below:
 
 1. Install dependencies if it was skipped in CLI:
 
 \`\`\`
-cd my-dapp-example
-yarn install
+cd my-fhenix-dapp-example
+pnpm install
 \`\`\`
 
 ${
@@ -22,7 +24,7 @@ ${
     ? `2. Run a local network in the first terminal:
 
 \`\`\`
-yarn chain
+pnpm chain
 \`\`\`
 
 This command starts a local Ethereum network using ${solidityFramework[0]}. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in ${networkConfigPath[0]}.
@@ -30,7 +32,7 @@ This command starts a local Ethereum network using ${solidityFramework[0]}. The 
 3. On a second terminal, deploy the test contract:
 
 \`\`\`
-yarn deploy
+pnpm deploy:contracts
 \`\`\`
 
 This command deploys a test smart contract to the local network. The contract is located in ${contractsPath[0]} and can be modified to suit your needs. The \`yarn deploy\` command uses the deploy script located in ${scriptsPath[0]} to deploy the contract to the network. You can also customize the deploy script.
@@ -40,17 +42,18 @@ This command deploys a test smart contract to the local network. The contract is
 }
 
 \`\`\`
-yarn start
+pnpm start
 \`\`\`
 
-Visit your app on: \`http://localhost:3000\`. You can interact with your smart contract using the \`Debug Contracts\` page. You can tweak the app config in \`packages/nextjs/scaffold.config.ts\`.
+Visit your app on: \`http://localhost:3000\`. You can interact with your smart contract using the \`Debug Contracts\` page. 
+You can tweak the app config in ${frontendScaffoldConfigPath[0]}.
 ${
   Boolean(solidityFramework[0])
     ? `
 Run smart contract test with ${testCommand[0]}
 
 - Edit your smart contract \`YourContract.sol\` in ${contractsPath[0]}
-- Edit your frontend homepage at \`packages/nextjs/app/page.tsx\`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
+- Edit your frontend homepage at ${frontendAppPagePath[0]}. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
 - Edit your deployment scripts in ${scriptsPath[0]}
 `
     : ""
@@ -60,10 +63,12 @@ const contents = ({
   solidityFramework,
   networkConfigPath,
   contractsPath,
+  frontendScaffoldConfigPath,
+  frontendAppPagePath,
   scriptsPath,
   testCommand,
 }) =>
-  `# 🏗 Scaffold-ETH 2
+  `# 🏗 Create Fhenix DApp
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
@@ -99,25 +104,29 @@ ${getQuickStart({
   solidityFramework,
   networkConfigPath,
   contractsPath,
+  frontendScaffoldConfigPath,
+  frontendAppPagePath,
   scriptsPath,
   testCommand,
 })}
 ## Documentation
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Create Fhenix DApp.
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 
-## Contributing to Scaffold-ETH 2
+## Contributing to Create Fhenix DApp
 
-We welcome contributions to Scaffold-ETH 2!
+We welcome contributions to Create Fhenix DApp!
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.`;
+Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Create Fhenix DApp.`;
 
 export default withDefaults(contents, {
   solidityFramework: "",
   networkConfigPath: "",
   contractsPath: "",
+  frontendScaffoldConfigPath: "",
+  frontendAppPagePath: "",
   scriptsPath: "",
   testCommand: "",
 });
