@@ -7,8 +7,8 @@
  */
 
 import * as fs from "fs";
-import prettier from "prettier";
 import { DeployFunction } from "hardhat-deploy/types";
+import prettier from "prettier";
 
 const generatedContractComment = `
 /**
@@ -19,7 +19,7 @@ const generatedContractComment = `
 
 const DEPLOYMENTS_DIR = "./deployments";
 const ARTIFACTS_DIR = "./artifacts";
-const FRONTEND_DIR = "../frontend"
+const FRONTEND_DIR = "../frontend";
 
 function getDirectories(path: string) {
   return fs
