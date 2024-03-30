@@ -19,6 +19,7 @@ const generatedContractComment = `
 
 const DEPLOYMENTS_DIR = "./deployments";
 const ARTIFACTS_DIR = "./artifacts";
+const FRONTEND_DIR = "../frontend"
 
 function getDirectories(path: string) {
   return fs
@@ -100,7 +101,7 @@ function getContractDataFromDeployments() {
  * This script should be run last.
  */
 const generateTsAbis: DeployFunction = async function () {
-  const TARGET_DIR = "../nextjs/contracts/";
+  const TARGET_DIR =  `${FRONTEND_DIR}/contracts/`;
   const allContractsData = getContractDataFromDeployments();
 
   const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
