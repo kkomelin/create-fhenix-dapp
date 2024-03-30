@@ -51,7 +51,7 @@
     "listr": "0.14.3",
     "merge-packages": "^0.1.6",
     "ncp": "2.0.0",
-    "pkg-install": "github:kkomelin/pkg-install#with-lib"
+    "pkg-install": "kkomelin/pkg-install"
   },
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "pnpm@8:15:4"
 }

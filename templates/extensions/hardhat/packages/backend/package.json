@@ -22,7 +22,9 @@
     "localfhenix:start": "hardhat localfhenix:start",
     "localfhenix:stop": "hardhat localfhenix:stop",
     "chain:faucet": "hardhat task:fhenix:usefaucet",
-    "clear": "rimraf ./artifacts ./cache ./coverage ./types ./coverage.json ./deployments/localfhenix"
+    "clear": "rimraf ./artifacts ./cache ./coverage ./types ./coverage.json ./deployments/localfhenix",
+    "create-config": "cp -n .env.example .env",
+    "postinstall": "pnpm create-config"
   },
   "devDependencies": {
     "@ethersproject/abi": "~5.7.0",

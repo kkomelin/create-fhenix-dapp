@@ -14,12 +14,17 @@ export async function renderOutroMessage(options: Options) {
   if (options.extensions.includes("hardhat")) {
     message += `
     \t${chalk.bold("Start the local development node")}
-    \t${chalk.dim("pnpm")} chain
+    \t${chalk.dim("pnpm")} chain:start
+    `;
+
+    message += `
+    \t${chalk.bold("Fund the deployer")}
+    \t${chalk.dim("pnpm")} chain:faucet
     `;
 
     message += `
     \t${chalk.bold("In a new terminal window, deploy your contracts")}
-    \t${chalk.dim("pnpm")} deploy
+    \t${chalk.dim("pnpm")} deploy:contracts
    `;
   }
 
