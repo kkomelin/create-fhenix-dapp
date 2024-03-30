@@ -1,7 +1,4 @@
-> ⚠️ The [CLI branch](https://github.com/scaffold-eth/scaffold-eth-2/tree/cli) is under active development.  
-> If you find any bug, please report as [issue](https://github.com/scaffold-eth/scaffold-eth-2/issues) or send a message in [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
-
-# 🏗 Scaffold-ETH 2
+# Create Fhenix DApp
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
@@ -25,7 +22,7 @@
 Before you begin, you need to install the following tools:
 
 - [Node (>= v18.17)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
+- [pnpm](https://pnpm.io/installation)
 - [Git](https://git-scm.com/downloads)
 
 ## Quickstart
@@ -41,12 +38,20 @@ npx create-fhenix-dapp@latest
 2. Run a local network in the first terminal:
 
 ```
-pnpm chain
+pnpm chain:start
 ```
 
 This command starts a local Ethereum network using Hardhat or Foundry, depending on which one you selected in the CLI. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in:
 
 - `packages/backend/hardhat.config.ts` if you have Hardhat as solidity framework.
+
+2. Fund the deployer
+
+```
+pnpm chain:faucet
+```
+
+This command fund the default deployer contract to be able to deploy to the local node.
 
 3. On a second terminal, deploy the test contract:
 
@@ -65,7 +70,7 @@ The `pnpm deploy:contracts` command uses a deploy script to deploy the contract 
 4. On a third terminal, start your NextJS app:
 
 ```
-yarn start
+pnpm start
 ```
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. 
@@ -85,8 +90,6 @@ Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building wit
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 
-## Contributing to Scaffold-ETH 2
+## Contributing to Create Fhenix DApp
 
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+TBD
