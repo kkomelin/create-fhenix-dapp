@@ -1,6 +1,6 @@
 {
-  "installCommand": "yarn install --frozen-lockfile",
-  "buildCommand": "yarn next:build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm next:build",
   "outputDirectory": "packages/nextjs/.next",
   "framework": "nextjs"
 }

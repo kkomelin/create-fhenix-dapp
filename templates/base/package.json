@@ -1,5 +1,5 @@
 {
-  "name": "se-2",
+  "name": "cfda",
   "version": "0.0.1",
   "private": true,
   "workspaces": {
@@ -9,25 +9,23 @@
   },
   "scripts": {
     "prepare": "install-self-peers -- --ignore-scripts",
-    "start": "yarn workspace @cfda/nextjs dev",
-    "next:lint": "yarn workspace @cfda/nextjs lint",
-    "next:format": "yarn workspace @cfda/nextjs format",
-    "next:check-types": "yarn workspace @cfda/nextjs check-types",
-    "next:build": "yarn workspace @cfda/nextjs build",
-    "format": "yarn next:format",
+    "start": "pnpm --filter frontend dev",
+    "next:lint": "pnpm --filter frontend lint",
+    "next:format": "pnpm --filter frontend format",
+    "next:check-types": "pnpm --filter frontend check-types",
+    "next:build": "pnpm --filter frontend build",
+    "format": "pnpm next:format",
     "postinstall": "husky install",
     "precommit": "lint-staged",
     "vercel": "vercel",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "pnpm@8:15:4",
   "devDependencies": {
     "husky": "~8.0.3",
     "lint-staged": "~13.2.2",
     "next": "~14.0.4",
-    "vercel": "~32.4.1"
-  },
-  "resolutions": {
-    "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
+    "vercel": "~32.4.1",
+    "install-self-peers": "kkomelin/install-self-peers"
   }
 }

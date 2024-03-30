@@ -1,19 +1,19 @@
 {
   "scripts": {
-    "account": "yarn workspace @cfda/hardhat account",
-    "chain": "yarn workspace @cfda/hardhat chain",
-    "fork": "yarn workspace @cfda/hardhat fork",
-    "deploy": "yarn workspace @cfda/hardhat deploy",
-    "verify": "yarn workspace @cfda/hardhat verify",
-    "hardhat-verify": "yarn workspace @cfda/hardhat hardhat-verify",
-    "compile": "yarn workspace @cfda/hardhat compile",
-    "generate": "yarn workspace @cfda/hardhat generate",
-    "hardhat:lint": "yarn workspace @cfda/hardhat lint",
-    "hardhat:lint-staged": "yarn workspace @cfda/hardhat lint-staged",
-    "hardhat:format": "yarn workspace @cfda/hardhat format",
-    "hardhat:test": "yarn workspace @cfda/hardhat test",
-    "test": "yarn hardhat:test",
-    "flatten": "yarn workspace @cfda/hardhat flatten",
-    "format": "yarn next:format && yarn hardhat:format"
+    "account": "pnpm --filter backend account",
+    "chain": "pnpm --filter backend chain",
+    "fork": "pnpm --filter backend fork",
+    "deploy:contracts": "pnpm --filter backend deploy:contracts",
+    "verify": "pnpm --filter backend verify",
+    "hardhat-verify": "pnpm --filter backend hardhat-verify",
+    "compile": "pnpm --filter backend compile",
+    "generate": "pnpm --filter backend generate",
+    "hardhat:lint": "pnpm --filter backend lint",
+    "hardhat:lint-staged": "pnpm --filter backend lint-staged",
+    "hardhat:format": "pnpm --filter backend format",
+    "hardhat:test": "pnpm --filter backend test",
+    "test": "pnpm hardhat:test",
+    "flatten": "pnpm --filter backend flatten",
+    "format": "pnpm next:format && pnpm hardhat:format"
   }
 }

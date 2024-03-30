@@ -11,11 +11,13 @@
   "bin": "bin/create-dapp-fhenix.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",
-    "build-and-cli": "yarn build && yarn cli",
+    "build-and-cli": "pnpm build && pnpm cli",
     "dev": "rollup -c rollup.config.js --watch",
     "cli": "node bin/create-dapp-fhenix.js",
+    "cli:dev": "pnpm cli --dev",
+    "build-and-cli:dev": "pnpm build && pnpm cli --dev",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "changeset:release": "yarn build && changeset publish"
+    "changeset:release": "pnpm build && changeset publish"
   },
   "keywords": [
     "cli",
@@ -49,7 +51,7 @@
     "listr": "0.14.3",
     "merge-packages": "^0.1.6",
     "ncp": "2.0.0",
-    "pkg-install": "1.0.0"
+    "pkg-install": "github:kkomelin/pkg-install#with-lib"
   },
   "packageManager": "yarn@3.5.0"
 }

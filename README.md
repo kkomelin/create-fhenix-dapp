@@ -30,42 +30,37 @@ Before you begin, you need to install the following tools:
 
 ## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+To get started with Create Fhenix DApp, follow the steps below:
 
 1. Install from NPM Registry and follow the CLI instructions.
 
 ```
-npx create-eth@latest
+npx create-fhenix-dapp@latest
 ```
-
-> 💬 Hint: If you choose Foundry as solidity framework in the CLI, you'll also need Foundryup installed in your machine. Checkout: [getfoundry.sh](https://getfoundry.sh)
 
 2. Run a local network in the first terminal:
 
 ```
-yarn chain
+pnpm chain
 ```
 
 This command starts a local Ethereum network using Hardhat or Foundry, depending on which one you selected in the CLI. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in:
 
-- `packages/hardhat/hardhat.config.ts` if you have Hardhat as solidity framework.
-- `packages/foundry/foundry.toml` if you have Foundry as solidity framework.
+- `packages/backend/hardhat.config.ts` if you have Hardhat as solidity framework.
 
 3. On a second terminal, deploy the test contract:
 
 ```
-yarn deploy
+pnpm deploy:contracts
 ```
 
 This command deploys a test smart contract to the local network. The contract can be modified to suit your needs. Is located in:
 
-- Hardhat => `packages/hardhat/contracts`
-- Foundry => `packages/foundry/contracts`
+- Hardhat => `packages/backend/contracts`
 
-The `yarn deploy` command uses a deploy script to deploy the contract to the network. You can customize it. Is located in:
+The `pnpm deploy:contracts` command uses a deploy script to deploy the contract to the network. You can customize it. Is located in:
 
-- Hardhat => `packages/hardhat/deploy`
-- Foundry => `packages/foundry/script`
+- Hardhat => `packages/backend/deploy`
 
 4. On a third terminal, start your NextJS app:
 
@@ -73,17 +68,16 @@ The `yarn deploy` command uses a deploy script to deploy the contract to the net
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. 
+You can tweak the app config in `packages/frontend/scaffold.config.ts`.
 
-Run smart contract test with `yarn hardhat:test` or `yarn foundry:test` depending of your solidity framework.
+Run smart contract test with `pnpm hardhat:test`.
 
 - Edit your smart contract:
-  - Hardhat => `YourContract.sol` in `packages/hardhat/contracts`
-  - Foundry => `YourContract.sol` in `packages/foundry/contracts`
-- Edit your frontend in `packages/nextjs/pages`
+  - Hardhat => `YourContract.sol` in `packages/banckend/contracts`
+- Edit your frontend in `packages/frontend/pages`
 - Edit your deployment scripts:
-  - Hardhat => `packages/hardhat/deploy`
-  - Foundry => `packages/foundry/script`
+  - Hardhat => `packages/backend/deploy`
 
 ## Documentation
 

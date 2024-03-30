@@ -37,7 +37,7 @@ export async function createProject(options: Options) {
         copyTemplateFiles(options, templateDirectory, targetDirectory),
     },
     {
-      title: `📦 Installing dependencies with yarn, this could take a while`,
+      title: `📦 Installing dependencies with pnpm, this could take a while`,
       task: () => installPackages(targetDirectory),
       skip: () => {
         if (!options.install) {
