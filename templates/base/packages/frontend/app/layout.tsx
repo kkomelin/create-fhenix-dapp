@@ -2,6 +2,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { Metadata } from "next";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
+import { APP_NAME } from "~~/config/main";
 import "~~/styles/globals.css";
 
 const baseUrl = process.env.VERCEL_URL
@@ -12,16 +13,16 @@ const imageUrl = `${baseUrl}/thumbnail.jpg`;
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Scaffold-ETH 2 App",
-    template: "%s | Scaffold-ETH 2",
+    default: APP_NAME,
+    template: `%s | ${APP_NAME}`,
   },
-  description: "Built with 🏗 Scaffold-ETH 2",
+  description: `Built with ${APP_NAME}`,
   openGraph: {
     title: {
-      default: "Scaffold-ETH 2 App",
-      template: "%s | Scaffold-ETH 2",
+      default: APP_NAME,
+      template: `%s | ${APP_NAME}`,
     },
-    description: "Built with 🏗 Scaffold-ETH 2",
+    description: `Built with ${APP_NAME}`,
     images: [
       {
         url: imageUrl,
@@ -32,10 +33,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: [imageUrl],
     title: {
-      default: "Scaffold-ETH 2",
-      template: "%s | Scaffold-ETH 2",
+      default: APP_NAME,
+      template: `%s | ${APP_NAME}`,
     },
-    description: "Built with 🏗 Scaffold-ETH 2",
+    description: `Built with ${APP_NAME}`,
   },
   icons: {
     icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
