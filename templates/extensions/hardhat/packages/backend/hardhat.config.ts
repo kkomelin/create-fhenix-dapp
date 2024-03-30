@@ -20,9 +20,9 @@ const TESTNET_RPC_URL = "https://api.testnet.fhenix.zone:7747";
 
 // @todo: Set proper type for the network config.
 const testnetConfig: any = {
-    chainId: TESTNET_CHAIN_ID,
-    url: TESTNET_RPC_URL,
-}
+  chainId: TESTNET_CHAIN_ID,
+  url: TESTNET_RPC_URL,
+};
 
 // Select either private keys or mnemonic from .env file or environment variables
 const deployerPrivateKey = process.env.DEPLOYER_PRIVATE_KEY;
@@ -35,7 +35,7 @@ if (!deployerPrivateKey) {
     count: 10,
     mnemonic,
     path: "m/44'/60'/0'/0",
-  }
+  };
 } else {
   testnetConfig.accounts = [deployerPrivateKey];
 }
