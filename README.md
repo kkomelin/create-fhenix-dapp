@@ -1,13 +1,15 @@
 # Create Fhenix DApp
 
 <h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
+  <a href="https://docs.fhenix.zone/docs/devdocs/intro">Fhenix Documentation</a> |
+  <a href="https://docs.scaffoldeth.io">Scaffold ETH Documentation</a> |
+  <a href="https://scaffoldeth.io">Scaffold ETH Website</a>
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Fhenix blockchain. 
+It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, Fhenixjs, and Typescript.
 
 - ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
 - 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
@@ -45,12 +47,6 @@ This command starts a local Ethereum network using Hardhat or Foundry, depending
 
 - `packages/backend/hardhat.config.ts` if you have Hardhat as solidity framework.
 
-2. Fund the deployer
-
-```
-pnpm chain:faucet
-```
-
 This command fund the default deployer contract to be able to deploy to the local node.
 
 3. On a second terminal, deploy the test contract:
@@ -73,6 +69,12 @@ The `pnpm deploy:contracts` command uses a deploy script to deploy the contract 
 pnpm start
 ```
 
+5. (optional) When you finish your work, stop the local Fhenix node:
+
+```
+pnpm chain:stop
+```
+
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. 
 You can tweak the app config in `packages/frontend/scaffold.config.ts`.
 
@@ -86,9 +88,15 @@ Run smart contract test with `pnpm hardhat:test`.
 
 ## Documentation
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+-  <a href="https://www.fhenix.io/">Fhenix Website</a>
+-  <a href="https://docs.fhenix.zone/docs/devdocs/intro">Fhenix Documentation</a>
+-  <a href="https://docs.scaffoldeth.io">Scaffold ETH Documentation</a>
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+## Roadmap
+
+- [ ] Finish the Fhenix Counter demo
+- [ ] Fix issue: backend: pnpm prepare$ install-self-peers -- --ignore-scripts│  ERR_PNPM_MISSING_PACKAGE_NAME  pnpm add requires the package name
+- [ ] Fix issue: package.json files of the scaffolded instance are minimized (which is wrong)
 
 ## Contributing to Create Fhenix DApp
 

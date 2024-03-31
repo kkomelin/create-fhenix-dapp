@@ -4,6 +4,7 @@ import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useAccount } from "wagmi";
+import CounterForm from "~~/components/fhenix/CounterForm";
 import { Address } from "~~/components/scaffold-eth";
 import { APP_NAME } from "~~/config/main";
 
@@ -38,6 +39,10 @@ const Home: NextPage = () => {
               packages/blockchain/contracts
             </code>
           </p>
+        </div>
+
+        <div className="flex-grow bg-base-500 w-full mt-16 px-8 py-12">
+          <CounterForm />
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">

@@ -25,10 +25,10 @@ export const fhenixLocal = defineChain({
   nativeCurrency: { name: "tFHE", symbol: "tFHE", decimals: 18 },
   rpcUrls: {
     public: {
-      http: ["https://api.testnet.fhenix.zone:7747"],
+      http: ["http://127.0.0.0:42069"],
     },
     default: {
-      http: ["https://api.testnet.fhenix.zone:7747"],
+      http: ["http://127.0.0.0:42069"],
     },
   },
   blockExplorers: {

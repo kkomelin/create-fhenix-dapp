@@ -6,7 +6,7 @@
     "chain:start": "hardhat localfhenix:start",
     "chain:stop": "hardhat localfhenix:stop",
     "compile": "hardhat compile",
-    "deploy:contracts": "hardhat deploy",
+    "deploy:contracts": "pnpm clear && hardhat deploy",
     "flatten": "hardhat flatten",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "format": "prettier --write ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",

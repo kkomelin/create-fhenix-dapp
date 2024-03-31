@@ -1,6 +1,7 @@
 import { Contract } from "ethers";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { getTokensFromFaucet } from "../utils/local";
 
 const CONTRACT_NAME = "Counter";
 
@@ -23,6 +24,16 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   */
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
+
+  // Fund the account before deploying.
+  if (hre.network.name === "localfhenix") {
+    const signers = await hre.ethers.getSigners();
+
+    if ((await hre.ethers.provider.getBalance(signers[0].address)).toString() === "0") {
+      await hre.fhenixjs.getFunds(signers[0].address);
+      console.log("Received tokens from the local faucet. Ready to deploy...");
+    }
+  }
 
   await deploy(CONTRACT_NAME, {
     from: deployer,

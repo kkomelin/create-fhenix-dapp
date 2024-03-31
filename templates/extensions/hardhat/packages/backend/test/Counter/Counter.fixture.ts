@@ -20,6 +20,7 @@ export async function getTokensFromFaucet() {
 
     if ((await hre.ethers.provider.getBalance(signers[0].address)).toString() === "0") {
       await hre.fhenixjs.getFunds(signers[0].address);
+      console.log("Received tokens from the local faucet. Ready to deploy.");
     }
   }
 }
