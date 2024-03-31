@@ -7,6 +7,7 @@ import { hardhat } from "viem/chains";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
+import { fhenixLocal } from "~~/config/fhenixNetworks";
 
 const BlockExplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, error } = useFetchBlocks();
@@ -28,7 +29,7 @@ const BlockExplorer: NextPage = () => {
       );
     }
 
-    if (targetNetwork.id !== hardhat.id) {
+    if (targetNetwork.id !== fhenixLocal.id) {
       notification.error(
         <>
           <p className="font-bold mt-0 mb-1">

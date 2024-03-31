@@ -1,17 +1,17 @@
 export const packageVercelIgnoreContent = `# --- Hardhat files ---
 
-packages/hardhat/node_modules
-packages/hardhat/.env
-packages/hardhat/coverage
-packages/hardhat/coverage.json
-packages/hardhat/typechain
-packages/hardhat/typechain-types
-packages/hardhat/temp
+packages/backend/node_modules
+packages/backend/.env
+packages/backend/coverage
+packages/backend/coverage.json
+packages/backend/typechain
+packages/backend/typechain-types
+packages/backend/temp
 
-packages/hardhat/cache
-packages/hardhat/artifacts
+packages/backend/cache
+packages/backend/artifacts
 
-packages/hardhat/artifacts-zk
-packages/hardhat/cache-zk
+packages/backend/artifacts-zk
+packages/backend/cache-zk
 
-packages/hardhat/deployments`;
+packages/backend/deployments`;

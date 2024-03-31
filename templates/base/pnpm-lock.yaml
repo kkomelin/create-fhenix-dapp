@@ -24,7 +24,7 @@ importers:
         specifier: ~32.4.1
         version: 32.4.1
 
-  packages/nextjs:
+  packages/frontend:
     dependencies:
       '@ethersproject/providers':
         specifier: ~5.7.2

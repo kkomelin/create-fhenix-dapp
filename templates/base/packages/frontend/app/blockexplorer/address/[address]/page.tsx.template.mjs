@@ -52,7 +52,7 @@ const getContractData = async (address: string) => {
     "..",
     "..",
     "..",
-    "${chainName[0]}",
+    "backend",
     "${artifactsDirName[0]}",
     "build-info",
   );

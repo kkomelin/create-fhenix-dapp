@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
 import { parse, stringify } from "envfile";
+import { ethers } from "ethers";
 import * as fs from "fs";
 
 const envFilePath = "./.env";
@@ -18,7 +18,7 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
 
   // Store in .env
   fs.writeFileSync(envFilePath, stringify(newEnvConfig));
-  console.log("📄 Private Key saved to packages/hardhat/.env file");
+  console.log("📄 Private Key saved to packages/backend/.env file");
   console.log("🪄 Generated wallet address:", randomWallet.address);
 };
 
@@ -32,7 +32,7 @@ async function main() {
   // .env file exists
   const existingEnvConfig = parse(fs.readFileSync(envFilePath).toString());
   if (existingEnvConfig.DEPLOYER_PRIVATE_KEY) {
-    console.log("⚠️ You already have a deployer account. Check the packages/hardhat/.env file");
+    console.log("⚠️ You already have a deployer account. Check the packages/backend/.env file");
     return;
   }
 

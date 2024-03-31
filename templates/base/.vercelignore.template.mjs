@@ -18,38 +18,38 @@ const contents = ({ packageVercelIgnoreContent }) =>
 # --- Next.js files ---
 
 # dependencies
-packages/nextjs/node_modules
-packages/nextjs/.pnp
-packages/nextjs/.pnp.js
+packages/frontend/node_modules
+packages/frontend/.pnp
+packages/frontend/.pnp.js
 
 # testing
-packages/nextjs/coverage
+packages/frontend/coverage
 
 # next.js
-packages/nextjs/.next/
-packages/nextjs/out/
+packages/frontend/.next/
+packages/frontend/out/
 
 # production
-packages/nextjs/build
+packages/frontend/build
 
 # misc
-packages/nextjs/.DS_Store
-packages/nextjs/*.pem
+packages/frontend/.DS_Store
+packages/frontend/*.pem
 
 # debug
-packages/nextjs/npm-debug.log*
-packages/nextjs/yarn-debug.log*
-packages/nextjs/yarn-error.log*
-packages/nextjs/.pnpm-debug.log*
+packages/frontend/npm-debug.log*
+packages/frontend/yarn-debug.log*
+packages/frontend/yarn-error.log*
+packages/frontend/.pnpm-debug.log*
 
 # local env files
-packages/nextjs/.env.local
-packages/nextjs/.env.development.local
-packages/nextjs/.env.test.local
-packages/nextjs/.env.production.local
+packages/frontend/.env.local
+packages/frontend/.env.development.local
+packages/frontend/.env.test.local
+packages/frontend/.env.production.local
 
 # typescript
-packages/nextjs/*.tsbuildinfo
+packages/frontend/*.tsbuildinfo
 
 ${packageVercelIgnoreContent.join("\n")}`;
 

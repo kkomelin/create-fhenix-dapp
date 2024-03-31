@@ -1,1 +1,1 @@
-export const APP_NAME = 'Create Fhenix DApp'
+export const APP_NAME = "Create Fhenix DApp";
