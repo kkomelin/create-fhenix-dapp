@@ -7,7 +7,7 @@ export async function deployCounterFixture(): Promise<{
 }> {
   const [owner] = await hre.ethers.getSigners();
   const Counter = await hre.ethers.getContractFactory("Counter");
-  const counter = await Counter.connect(owner).deploy(owner);
+  const counter = await Counter.connect(owner).deploy();
   await counter.waitForDeployment();
 
   const address = await counter.getAddress();

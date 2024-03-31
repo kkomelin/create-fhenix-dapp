@@ -9,8 +9,8 @@ contract Counter is Permissioned {
   euint32 private counter;
   address public owner;
 
-  constructor(address _owner) {
-    owner = _owner;
+  constructor() {
+    owner = msg.sender;
   }
 
   function add(inEuint32 calldata encryptedValue) public {
