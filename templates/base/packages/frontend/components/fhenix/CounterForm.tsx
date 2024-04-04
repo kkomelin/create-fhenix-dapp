@@ -2,11 +2,13 @@ import { EncryptionTypes, FhenixClient } from "fhenixjs";
 import { ChangeEvent, useState } from "react";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
+const CONTRACT_NAME = "Counter";
+
 const CounterForm = () => {
   const [newValue, setNewValue] = useState<number>();
 
   const { counter, isLoading: isTotalCounterLoading } = useScaffoldContractRead({
-    contractName: "Counter",
+    contractName: CONTRACT_NAME,
     functionName: "getCounter",
     watch: true,
   });
@@ -27,6 +29,9 @@ const CounterForm = () => {
 
     // to encrypt data for a Fhenix contract
     let encrypted = await client.encrypt(5, EncryptionTypes.uint8);
+
+    // New way...
+    // useScaffoldContractWrite({ contractName: CONTRACT_NAME, functionName: "add", args: [encrypted] });
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
