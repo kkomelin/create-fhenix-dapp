@@ -1,18 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { createWalletClient, http, parseEther } from "viem";
-import { hardhat } from "viem/chains";
-import { useAccount, useNetwork } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { useAccountBalance, useTransactor } from "~~/hooks/scaffold-eth";
-
-// Number of ETH faucet sends to an address
-const NUM_OF_ETH = "1";
-const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+import { useState } from "react";
+import { createWalletClient, http } from "viem";
+import { useAccount, useNetwork } from "wagmi";
+import { fhenixLocal } from "~~/config/fhenixNetworks";
+import { useLocalFhenixFaucet } from "~~/hooks/fhenix/useLocalFhenixFaucet";
+import { useAccountBalance } from "~~/hooks/scaffold-eth";
 
 const localWalletClient = createWalletClient({
-  chain: hardhat,
+  chain: fhenixLocal,
   transport: http(),
 });
 
@@ -26,17 +23,13 @@ export const FaucetButton = () => {
   const { chain: ConnectedChain } = useNetwork();
 
   const [loading, setLoading] = useState(false);
-
-  const faucetTxn = useTransactor(localWalletClient);
+  const faucetTxn = useLocalFhenixFaucet(localWalletClient);
 
   const sendETH = async () => {
     try {
       setLoading(true);
       await faucetTxn({
-        chain: hardhat,
-        account: FAUCET_ADDRESS,
         to: address,
-        value: parseEther(NUM_OF_ETH),
       });
       setLoading(false);
     } catch (error) {
@@ -46,7 +39,7 @@ export const FaucetButton = () => {
   };
 
   // Render only on local chain
-  if (ConnectedChain?.id !== hardhat.id) {
+  if (ConnectedChain?.id !== fhenixLocal.id) {
     return null;
   }
 

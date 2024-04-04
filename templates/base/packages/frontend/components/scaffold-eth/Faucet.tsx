@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
-import { hardhat } from "viem/chains";
-import { useNetwork } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { Address, AddressInput, Balance, EtherInput } from "~~/components/scaffold-eth";
-import { useTransactor } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
+import { useEffect, useState } from "react";
+import { Address as AddressType, createWalletClient, http } from "viem";
+import { useAccount, useNetwork } from "wagmi";
+import { AddressInput } from "~~/components/scaffold-eth";
+import { fhenixLocal } from "~~/config/fhenixNetworks";
+import { useLocalFhenixFaucet } from "~~/hooks/fhenix/useLocalFhenixFaucet";
 
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
 
 const localWalletClient = createWalletClient({
-  chain: hardhat,
+  chain: fhenixLocal,
   transport: http(),
 });
 
@@ -23,52 +22,27 @@ const localWalletClient = createWalletClient({
 export const Faucet = () => {
   const [loading, setLoading] = useState(false);
   const [inputAddress, setInputAddress] = useState<AddressType>();
-  const [faucetAddress, setFaucetAddress] = useState<AddressType>();
-  const [sendValue, setSendValue] = useState("");
+  const { address } = useAccount();
 
   const { chain: ConnectedChain } = useNetwork();
 
-  const faucetTxn = useTransactor(localWalletClient);
+  const faucetTxn = useLocalFhenixFaucet(localWalletClient);
 
   useEffect(() => {
-    const getFaucetAddress = async () => {
-      try {
-        const accounts = await localWalletClient.getAddresses();
-        setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
-      } catch (error) {
-        notification.error(
-          <>
-            <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
-            <p className="m-0">
-              - Did you forget to run <code className="italic bg-base-300 text-base font-bold">yarn chain</code> ?
-            </p>
-            <p className="mt-1 break-normal">
-              - Or you can change <code className="italic bg-base-300 text-base font-bold">targetNetwork</code> in{" "}
-              <code className="italic bg-base-300 text-base font-bold">scaffold.config.ts</code>
-            </p>
-          </>,
-        );
-        console.error("⚡️ ~ file: Faucet.tsx:getFaucetAddress ~ error", error);
-      }
-    };
-    getFaucetAddress();
-  }, []);
+    setInputAddress(address);
+  }, [address]);
 
   const sendETH = async () => {
-    if (!faucetAddress) {
+    if (!inputAddress) {
       return;
     }
     try {
       setLoading(true);
       await faucetTxn({
-        to: inputAddress,
-        value: parseEther(sendValue as `${number}`),
-        account: faucetAddress,
-        chain: hardhat,
+        to: inputAddress.toString(),
       });
       setLoading(false);
       setInputAddress(undefined);
-      setSendValue("");
     } catch (error) {
       console.error("⚡️ ~ file: Faucet.tsx:sendETH ~ error", error);
       setLoading(false);
@@ -76,7 +50,7 @@ export const Faucet = () => {
   };
 
   // Render only on local chain
-  if (ConnectedChain?.id !== hardhat.id) {
+  if (ConnectedChain?.id !== fhenixLocal.id) {
     return null;
   }
 
@@ -96,23 +70,12 @@ export const Faucet = () => {
             ✕
           </label>
           <div className="space-y-3">
-            <div className="flex space-x-4">
-              <div>
-                <span className="text-sm font-bold">From:</span>
-                <Address address={faucetAddress} />
-              </div>
-              <div>
-                <span className="text-sm font-bold pl-3">Available:</span>
-                <Balance address={faucetAddress} />
-              </div>
-            </div>
             <div className="flex flex-col space-y-3">
               <AddressInput
                 placeholder="Destination Address"
                 value={inputAddress ?? ""}
                 onChange={value => setInputAddress(value as AddressType)}
               />
-              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
               <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
                 {!loading ? (
                   <BanknotesIcon className="h-6 w-6" />

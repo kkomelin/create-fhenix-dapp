@@ -25,13 +25,14 @@ export const fhenixLocal = defineChain({
   nativeCurrency: { name: "tFHE", symbol: "tFHE", decimals: 18 },
   rpcUrls: {
     public: {
-      http: ["http://127.0.0.0:42069"],
+      http: ["http://127.0.0.1:42069"],
     },
     default: {
-      http: ["http://127.0.0.0:42069"],
+      http: ["http://127.0.0.1:42069"],
     },
   },
   blockExplorers: {
     default: { name: "Fhenix Local Explorer", url: "http://localhost:3000/blockexplorer" },
   },
+  faucetUrl: 'http://127.0.0.1:42000/faucet'
 });
