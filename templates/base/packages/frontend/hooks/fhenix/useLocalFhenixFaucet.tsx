@@ -1,28 +1,17 @@
-import { WriteContractResult, getPublicClient } from "@wagmi/core";
-import { Hash, SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
+import { WalletClient } from "viem";
 import { useWalletClient } from "wagmi";
-import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
+import { FHENIX_LOCAL_FAUCET_URL } from "~~/config/fhenix";
+import { getParsedError, notification } from "~~/utils/scaffold-eth";
 
-type TransactionFunc = (
-  tx: (() => Promise<WriteContractResult>) | (() => Promise<Hash>) | SendTransactionParameters,
-  options?: {
-    onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
-    blockConfirmations?: number;
-  },
-) => Promise<Hash | undefined>;
+type TransactionFunc = (tx: { to: string }) => Promise<string | undefined>;
 
 /**
- * Custom notification content for TXs.
+ * Custom notification content for Operation.
  */
-const TxnNotification = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
+const OpNotification = ({ message }: { message: string }) => {
   return (
     <div className={`flex flex-col ml-1 cursor-default`}>
       <p className="my-0">{message}</p>
-      {blockExplorerLink && blockExplorerLink.length > 0 ? (
-        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link text-md">
-          check out transaction
-        </a>
-      ) : null}
     </div>
   );
 };
@@ -33,74 +22,62 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
  * @returns function that takes in transaction function as callback, shows UI feedback for transaction and returns a promise of the transaction hash
  */
 export const useLocalFhenixFaucet = (_walletClient?: WalletClient): TransactionFunc => {
-  console.log('test', _walletClient)
   let walletClient = _walletClient;
   const { data } = useWalletClient();
   if (walletClient === undefined && data) {
     walletClient = data;
   }
 
-  const result: TransactionFunc = async (tx, options) => {
-    if (!walletClient) {
-      notification.error("Cannot access account");
-      console.error("⚡️ ~ file: useTransactor.tsx ~ error");
+  const result: TransactionFunc = async ({ to }) => {
+    if (walletClient == null) {
+      notification.error("Cannot access faucet");
+      console.error("⚡️ ~ file: useLocalFhenixFaucet.tsx ~ error");
       return;
     }
 
     let notificationId = null;
-    let transactionHash: Awaited<WriteContractResult>["hash"] | undefined = undefined;
+    notificationId = notification.loading(<OpNotification message="Waiting for funds to arrive" />);
+
+    let faucetResult = "";
+
     try {
-      const network = await walletClient.getChainId();
-      // Get full transaction from public client
-      const publicClient = getPublicClient();
+      // @fixme: For some reason, probably because of Next.js intervention to the Fetch API, the result of the request is of a wrong format. Fix it.
 
-      notificationId = notification.loading(<TxnNotification message="Awaiting for user confirmation" />);
-      if (typeof tx === "function") {
-        // Tx is already prepared by the caller
-        const result = await tx();
-        if (typeof result === "string") {
-          transactionHash = result;
-        } else {
-          transactionHash = result.hash;
-        }
-      } else if (tx != null) {
-        transactionHash = await walletClient.sendTransaction(tx);
-      } else {
-        throw new Error("Incorrect transaction passed to transactor");
-      }
-      notification.remove(notificationId);
-
-      const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionHash) : "";
-
-      notificationId = notification.loading(
-        <TxnNotification message="Waiting for transaction to complete." blockExplorerLink={blockExplorerTxURL} />,
-      );
-
-      const transactionReceipt = await publicClient.waitForTransactionReceipt({
-        hash: transactionHash,
-        confirmations: options?.blockConfirmations,
-      });
-      notification.remove(notificationId);
-
-      notification.success(
-        <TxnNotification message="Transaction completed successfully!" blockExplorerLink={blockExplorerTxURL} />,
+      const fetchResult = await fetch(
+        FHENIX_LOCAL_FAUCET_URL +
+          "?" +
+          new URLSearchParams({
+            address: to,
+          }),
         {
-          icon: "🎉",
+          method: "GET",
+          headers: new Headers({ "content-type": "application/json" }),
+          mode: "no-cors",
         },
       );
 
-      if (options?.onBlockConfirmation) options.onBlockConfirmation(transactionReceipt);
+      const json = await fetchResult.json();
+
+      if (json.error != null) {
+        notification.error(json.error);
+        throw new Error(json.error);
+      }
+
+      notification.remove(notificationId);
+
+      notification.success(<OpNotification message="Funds arrived successfully" />, {
+        icon: "🎉",
+      });
     } catch (error: any) {
       if (notificationId) {
         notification.remove(notificationId);
       }
-      console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
+      console.error("⚡️ ~ file: useLocalFhenixFaucet.tsx ~ error", error);
       const message = getParsedError(error);
       notification.error(message);
       throw error;
     }
-
-    return transactionHash;
+    return faucetResult;
   };
 
   return result;

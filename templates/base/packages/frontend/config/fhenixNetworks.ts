@@ -34,5 +34,4 @@ export const fhenixLocal = defineChain({
   blockExplorers: {
     default: { name: "Fhenix Local Explorer", url: "http://localhost:3000/blockexplorer" },
   },
-  faucetUrl: 'http://127.0.0.1:42000/faucet'
 });
