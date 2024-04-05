@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPublicClient, http } from "viem";
+import { fhenixLocal } from "~~/config/fhenixNetworks";
+import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { AddressCodeTab } from "./AddressCodeTab";
 import { AddressLogsTab } from "./AddressLogsTab";
 import { AddressStorageTab } from "./AddressStorageTab";
 import { PaginationButton } from "./PaginationButton";
 import { TransactionsTable } from "./TransactionsTable";
-import { createPublicClient, http } from "viem";
-import { hardhat } from "viem/chains";
-import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -21,7 +21,7 @@ type PageProps = {
 };
 
 const publicClient = createPublicClient({
-  chain: hardhat,
+  chain: fhenixLocal,
   transport: http(),
 });
 
@@ -32,7 +32,7 @@ export const ContractTabs = ({ address, contractData }: PageProps) => {
 
   useEffect(() => {
     const checkIsContract = async () => {
-      const contractCode = await publicClient.getBytecode({ address: address });
+      const contractCode = await publicClient.getBytecode({ address });
       setIsContract(contractCode !== undefined && contractCode !== "0x");
     };
 

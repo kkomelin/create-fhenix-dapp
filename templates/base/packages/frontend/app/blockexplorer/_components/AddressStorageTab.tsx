@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Address, createPublicClient, http, toHex } from "viem";
-import { hardhat } from "viem/chains";
+import { fhenixLocal } from "~~/config/fhenixNetworks";
 
 const publicClient = createPublicClient({
-  chain: hardhat,
+  chain: fhenixLocal,
   transport: http(),
 });
 
