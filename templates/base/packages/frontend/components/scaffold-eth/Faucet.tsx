@@ -8,9 +8,6 @@ import { AddressInput } from "~~/components/scaffold-eth";
 import { fhenixLocal } from "~~/config/fhenixNetworks";
 import { useLocalFhenixFaucet } from "~~/hooks/fhenix/useLocalFhenixFaucet";
 
-// Account index to use from generated hardhat accounts.
-const FAUCET_ACCOUNT_INDEX = 0;
-
 const localWalletClient = createWalletClient({
   chain: fhenixLocal,
   transport: http(),
@@ -26,7 +23,7 @@ export const Faucet = () => {
 
   const { chain: ConnectedChain } = useNetwork();
 
-  const faucetTxn = useLocalFhenixFaucet(localWalletClient);
+  const faucetRequest = useLocalFhenixFaucet(localWalletClient);
 
   useEffect(() => {
     setInputAddress(address);
@@ -38,9 +35,7 @@ export const Faucet = () => {
     }
     try {
       setLoading(true);
-      await faucetTxn({
-        to: inputAddress.toString(),
-      });
+      await faucetRequest(inputAddress);
       setLoading(false);
       setInputAddress(undefined);
     } catch (error) {

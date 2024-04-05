@@ -23,14 +23,16 @@ export const FaucetButton = () => {
   const { chain: ConnectedChain } = useNetwork();
 
   const [loading, setLoading] = useState(false);
-  const faucetTxn = useLocalFhenixFaucet(localWalletClient);
+  const faucetRequest = useLocalFhenixFaucet(localWalletClient);
 
-  const sendETH = async () => {
+  const sendETH = async () => {    
+    if (!address) {
+      return;
+    }
+
     try {
       setLoading(true);
-      await faucetTxn({
-        to: address,
-      });
+      await faucetRequest(address);
       setLoading(false);
     } catch (error) {
       console.error("⚡️ ~ file: FaucetButton.tsx:sendETH ~ error", error);
