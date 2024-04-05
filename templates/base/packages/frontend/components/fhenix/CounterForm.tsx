@@ -1,16 +1,31 @@
+import { BeakerIcon } from "@heroicons/react/24/outline";
 import { JsonRpcProvider } from "ethers";
 import { EncryptionTypes, FhenixClient } from "fhenixjs";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useNetwork } from "wagmi";
-import { useDeployedContractInfo, useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { useEffect, useState } from "react";
+import { TransactionReceipt } from "viem";
+import { useNetwork, useWaitForTransaction } from "wagmi";
+import { TxReceipt } from "~~/app/debug/_components/contract";
+import {
+  useDeployedContractInfo,
+  useScaffoldContractRead,
+  useScaffoldContractWrite,
+  useTransactor,
+} from "~~/hooks/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { IntegerInput } from "../scaffold-eth";
 
 const CONTRACT_NAME = "Counter";
 
 const CounterForm = () => {
-  const [newValue, setNewValue] = useState<number>(0);
+  const [newValue, setNewValue] = useState<string | bigint>(0n);
   const [counterValue, setCounterValue] = useState<number>();
   const { chain: connectedChain } = useNetwork();
   const { data: deployedContractData, isLoading: isDeployedContractLoading } = useDeployedContractInfo(CONTRACT_NAME);
+
+  const { chain } = useNetwork();
+  const writeTxn = useTransactor();
+  const { targetNetwork } = useTargetNetwork();
+  const writeDisabled = !chain || chain?.id !== targetNetwork.id;
 
   const { data: sealedCounter, isLoading: isTotalCounterLoading } = useScaffoldContractRead({
     contractName: CONTRACT_NAME,
@@ -19,9 +34,9 @@ const CounterForm = () => {
   });
 
   const {
+    data: addResult,
     writeAsync: addValue,
     isLoading: isAddValueLoading,
-    isMining,
   } = useScaffoldContractWrite({
     contractName: CONTRACT_NAME,
     functionName: "add",
@@ -30,6 +45,28 @@ const CounterForm = () => {
       console.log("Transaction blockHash", txnReceipt.blockHash);
     },
   });
+
+  const handleWrite = async () => {
+    if (addValue) {
+      try {
+        const encryptedNumber = await encryptNumber(Number(newValue));
+
+        const makeWriteWithParams = () => addValue({ args: [encryptedNumber] });
+        await writeTxn(makeWriteWithParams);
+      } catch (e: any) {
+        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+      }
+    }
+  };
+
+  const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
+  const { data: txResult } = useWaitForTransaction({
+    hash: addResult?.hash,
+  });
+
+  useEffect(() => {
+    setDisplayedTxResult(txResult);
+  }, [txResult]);
 
   const getFhenixClient = () => {
     // Initialize the provider.
@@ -52,16 +89,6 @@ const CounterForm = () => {
     return client.unseal(contractAddress, sealedCounter);
   };
 
-  const handleAddValue = async () => {
-    const encryptedNumber = await encryptNumber(newValue);
-
-    await addValue({ args: [encryptedNumber] });
-  };
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewValue(Number(e.target.value));
-  };
-
   useEffect(() => {
     if (!isDeployedContractLoading || deployedContractData?.address == null) {
       return;
@@ -74,21 +101,79 @@ const CounterForm = () => {
   }, [sealedCounter, isDeployedContractLoading]);
 
   return (
-    <div className="flex flex-col items-center justify-center border-indigo-500 border p-8">
-      <h2 className="font-semibold mb-5">Simple demo</h2>
+    <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+      <div className="flex flex-col justify-center items-center">
+        <BeakerIcon className="h-8 w-8 fill-secondary" />
+        <p>Counter demo</p>
+      </div>
 
       {(isTotalCounterLoading || isAddValueLoading) && <div>Loading</div>}
 
-      <div className="flex flex-col justify-center items-center">
+      <div className="p-2">{counterValue || 0}</div>
+
+      <div className="py-5 space-y-3 first:pt-0 last:pb-1">
+        <div className="flex gap-3 flex-col">
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-center ml-2">
+              <span className="text-xs font-medium mr-2 leading-none">add to counter</span>
+              <span className="block text-xs font-extralight leading-none">num</span>
+            </div>
+            <IntegerInput
+              value={newValue}
+              onChange={updatedTxValue => {
+                setDisplayedTxResult(undefined);
+                setNewValue(updatedTxValue);
+              }}
+              placeholder="number"
+              disableMultiplyBy1e18={true}
+            />
+          </div>
+
+          <div className="flex justify-between gap-2">
+            <div className="flex-grow basis-0">
+              {displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}
+            </div>
+
+            <div
+              className={`flex ${
+                writeDisabled &&
+                "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+              }`}
+              data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
+            >
+              <button
+                className="btn btn-secondary btn-sm"
+                disabled={writeDisabled || isAddValueLoading}
+                onClick={handleWrite}
+              >
+                {isAddValueLoading && <span className="loading loading-spinner loading-xs"></span>}
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+        {txResult ? (
+          <div className="flex-grow basis-0">
+            <TxReceipt txResult={txResult} />
+          </div>
+        ) : null}
+      </div>
+
+      {/* <div className="flex flex-col justify-center items-center">
         <div className="p-2">Counter value: {counterValue}</div>
 
         <div className="flex flex-row">
-          <input className="px-3 py-2 rounded-sm" onChange={handleInputChange} />
-          <button className="px-3 py-2 border rounded-sm" onClick={handleAddValue}>
+          <IntegerInput
+            name="value"
+            value={BigInt(newValue)}
+            onChange={handleInputChange}
+            disableMultiplyBy1e18={true}
+          />
+          <button className="px-3 py-2 border rounded btn btn-sm btn-primary" onClick={handleAddValue}>
             Add value
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
