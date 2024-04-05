@@ -21,13 +21,11 @@ const CounterForm = () => {
   const [counterValue, setCounterValue] = useState<number>();
   const { chain: connectedChain } = useNetwork();
   const { data: deployedContractData, isLoading: isDeployedContractLoading } = useDeployedContractInfo(CONTRACT_NAME);
-
-  const { chain } = useNetwork();
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
-  const writeDisabled = !chain || chain?.id !== targetNetwork.id;
+  const writeDisabled = !connectedChain || connectedChain?.id !== targetNetwork.id;
 
-  const { data: sealedCounter, isLoading: isTotalCounterLoading } = useScaffoldContractRead({
+  const { data: sealedCounterValue, isLoading: isTotalCounterLoading } = useScaffoldContractRead({
     contractName: CONTRACT_NAME,
     functionName: "getCounter",
     watch: true,
@@ -64,10 +62,6 @@ const CounterForm = () => {
     hash: addResult?.hash,
   });
 
-  useEffect(() => {
-    setDisplayedTxResult(txResult);
-  }, [txResult]);
-
   const getFhenixClient = () => {
     // Initialize the provider.
     // @todo: Find a way not to use ethers.JsonRpcProvider because we already have viem and wagmi here.
@@ -83,22 +77,28 @@ const CounterForm = () => {
     return await client.encrypt(value, EncryptionTypes.uint8);
   };
 
-  const unsealValue = (contractAddress: string, value: number) => {
+  const unsealValue = (contractAddress: string, sealedValue: string) => {
     const client = getFhenixClient();
     // Unseal value before displaying it.
-    return client.unseal(contractAddress, sealedCounter);
+    return client.unseal(contractAddress, sealedValue);
   };
 
   useEffect(() => {
-    if (!isDeployedContractLoading || deployedContractData?.address == null) {
+    setDisplayedTxResult(txResult);
+  }, [txResult]);
+
+  useEffect(() => {
+    if (isDeployedContractLoading || deployedContractData?.address == null) {
       return;
     }
+    console.log("sealed counter value", sealedCounterValue);
 
     // Unseal value before displaying it.
-    const clearedValue = unsealValue(deployedContractData?.address, sealedCounter);
+    const clearedValue = unsealValue(deployedContractData?.address, sealedCounterValue);
+
     // @todo: Use bigint for large values.
     setCounterValue(Number(clearedValue));
-  }, [sealedCounter, isDeployedContractLoading]);
+  }, [sealedCounterValue, isDeployedContractLoading]);
 
   return (
     <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
@@ -158,22 +158,6 @@ const CounterForm = () => {
           </div>
         ) : null}
       </div>
-
-      {/* <div className="flex flex-col justify-center items-center">
-        <div className="p-2">Counter value: {counterValue}</div>
-
-        <div className="flex flex-row">
-          <IntegerInput
-            name="value"
-            value={BigInt(newValue)}
-            onChange={handleInputChange}
-            disableMultiplyBy1e18={true}
-          />
-          <button className="px-3 py-2 border rounded btn btn-sm btn-primary" onClick={handleAddValue}>
-            Add value
-          </button>
-        </div>
-      </div> */}
     </div>
   );
 };
