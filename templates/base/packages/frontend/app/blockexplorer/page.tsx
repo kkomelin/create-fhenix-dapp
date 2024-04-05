@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
-import { PaginationButton, SearchBar, TransactionsTable } from "./_components";
 import type { NextPage } from "next";
-import { hardhat } from "viem/chains";
+import { useEffect } from "react";
+import { fhenixLocal } from "~~/config/fhenixNetworks";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
-import { fhenixLocal } from "~~/config/fhenixNetworks";
+import { PaginationButton, SearchBar, TransactionsTable } from "./_components";
 
 const BlockExplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, error } = useFetchBlocks();

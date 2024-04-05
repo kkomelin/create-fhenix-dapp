@@ -9,15 +9,16 @@ import {
   walletActions,
   webSocket,
 } from "viem";
-import { hardhat } from "viem/chains";
+import { FHENIX_LOCAL_WEBSOCKETS_URL } from "~~/config/fhenix";
+import { fhenixLocal } from "~~/config/fhenixNetworks";
 import { decodeTransactionData } from "~~/utils/scaffold-eth";
 
 const BLOCKS_PER_PAGE = 20;
 
 export const testClient = createTestClient({
-  chain: hardhat,
+  chain: fhenixLocal,
   mode: "hardhat",
-  transport: webSocket("ws://127.0.0.1:8545"),
+  transport: webSocket(FHENIX_LOCAL_WEBSOCKETS_URL),
 })
   .extend(publicActions)
   .extend(walletActions);
