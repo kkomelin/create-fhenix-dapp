@@ -1,17 +1,11 @@
 import { BeakerIcon } from "@heroicons/react/24/outline";
-import { JsonRpcProvider } from "ethers";
+import { BrowserProvider, Eip1193Provider, JsonRpcProvider, ethers } from "ethers";
 import { EncryptionTypes, FhenixClient } from "fhenixjs";
-import { useEffect, useState } from "react";
-import { TransactionReceipt } from "viem";
-import { useNetwork, useWaitForTransaction } from "wagmi";
-import { TxReceipt } from "~~/app/debug/_components/contract";
-import {
-  useDeployedContractInfo,
-  useScaffoldContractRead,
-  useScaffoldContractWrite,
-  useTransactor,
-} from "~~/hooks/scaffold-eth";
+import { useEffect, useRef, useState } from "react";
+import { useNetwork } from "wagmi";
+import { useDeployedContractInfo, useScaffoldContractRead, useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { notification } from "~~/utils/scaffold-eth";
 import { IntegerInput } from "../scaffold-eth";
 
 const CONTRACT_NAME = "Counter";
@@ -19,6 +13,8 @@ const CONTRACT_NAME = "Counter";
 const CounterForm = () => {
   const [newValue, setNewValue] = useState<string | bigint>(0n);
   const [counterValue, setCounterValue] = useState<number>();
+  const fhenixProvider = useRef<JsonRpcProvider | BrowserProvider | null>(null);
+  const fhenixClient = useRef<FhenixClient | null>(null);
   const { chain: connectedChain } = useNetwork();
   const { data: deployedContractData, isLoading: isDeployedContractLoading } = useDeployedContractInfo(CONTRACT_NAME);
   const writeTxn = useTransactor();
@@ -31,44 +27,97 @@ const CounterForm = () => {
     watch: true,
   });
 
-  const {
-    data: addResult,
-    writeAsync: addValue,
-    isLoading: isAddValueLoading,
-  } = useScaffoldContractWrite({
-    contractName: CONTRACT_NAME,
-    functionName: "add",
-    blockConfirmations: 1,
-    onBlockConfirmation: txnReceipt => {
-      console.log("Transaction blockHash", txnReceipt.blockHash);
-    },
-  });
+  const [isAddValueLoading, setIsAddValueLoading] = useState<boolean>(false);
+
+  let addResult = null;
+
+  // const {
+  //   data: addResult,
+  //   writeAsync: addValue,
+  //   isLoading: isAddValueLoading,
+  // } = useScaffoldContractWrite({
+  //   contractName: CONTRACT_NAME,
+  //   functionName: "add",
+  //   blockConfirmations: 1,
+  //   onBlockConfirmation: txnReceipt => {
+  //     console.log("Transaction blockHash", txnReceipt.blockHash);
+  //   },
+  // });
+
+  /**
+   * @todo: Switch to useScaffoldContractWrite() or such.
+   *
+   *
+   * @param amount
+   * @returns
+   */
+  async function addValue(amount: number) {
+    const provider = getFhenixProvider();
+    if (provider == null) {
+      notification.error("No provider found");
+      throw new Error("No provider found");
+    }
+
+    const client = getFhenixClient();
+    if (client == null) {
+      notification.error("No FHE client found");
+      throw new Error("No FHE client found");
+    }
+
+    if (deployedContractData?.address == null) {
+      notification.error("Cannot find the deployed contract");
+      throw new Error("Cannot find the deployed contract");
+    }
+
+    const signer = await provider.getSigner();
+
+    const contract = new ethers.Contract(deployedContractData?.address, deployedContractData?.abi, signer);
+    // @todo: Load proper types for the contract.
+    const contractWithSigner = contract.connect(signer); // as Counter;
+
+    const encryptedAmount = await encryptNumber(amount);
+
+    const tx = await contractWithSigner.add(encryptedAmount);
+    return await tx.wait();
+  }
 
   const handleWrite = async () => {
     if (addValue) {
       try {
-        const encryptedNumber = await encryptNumber(Number(newValue));
-
-        const makeWriteWithParams = () => addValue({ args: [encryptedNumber] });
-        await writeTxn(makeWriteWithParams);
+        // const encryptedNumber = await encryptNumber(Number(newValue));
+        // console.log(encryptedNumber);
+        setIsAddValueLoading(true);
+        // () => addValue({ args: [encryptedNumber] });
+        return await writeTxn(() => addValue(Number(newValue)));
       } catch (e: any) {
-        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+        console.error("⚡️ ~ file: CounterForm.tsx:handleWrite ~ error", e);
+      } finally {
+        setIsAddValueLoading(false);
       }
     }
   };
 
-  const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
-  const { data: txResult } = useWaitForTransaction({
-    hash: addResult?.hash,
-  });
+  const getFhenixProvider = () => {
+    if (fhenixProvider.current != null) {
+      return fhenixProvider.current;
+    }
+
+    // Initialize the provider.
+    // @todo: Find a way not to use ethers.BrowserProvider because we already have viem and wagmi here.
+    fhenixProvider.current = new BrowserProvider(window.ethereum as Eip1193Provider);
+
+    return fhenixProvider.current;
+  };
 
   const getFhenixClient = () => {
-    // Initialize the provider.
-    // @todo: Find a way not to use ethers.JsonRpcProvider because we already have viem and wagmi here.
-    const provider = new JsonRpcProvider(connectedChain?.rpcUrls.default.http[0]); // "https://test01.fhenix.zone/evm"
+    if (fhenixClient.current != null) {
+      return fhenixClient.current;
+    }
 
-    // Initialize Fhenix Client.
-    return new FhenixClient({ provider });
+    const provider = getFhenixProvider();
+
+    fhenixClient.current = new FhenixClient({ provider });
+    return fhenixClient.current;
   };
 
   const encryptNumber = async (value: number) => {
@@ -78,22 +127,18 @@ const CounterForm = () => {
   };
 
   const unsealValue = (contractAddress: string, sealedValue: string) => {
-    const client = getFhenixClient();
+    // const client = getFhenixClient();
     // Unseal value before displaying it.
-    return client.unseal(contractAddress, sealedValue);
+    // return client.unseal(contractAddress, sealedValue);
+    return sealedValue;
   };
-
-  useEffect(() => {
-    setDisplayedTxResult(txResult);
-  }, [txResult]);
 
   useEffect(() => {
     if (isDeployedContractLoading || deployedContractData?.address == null) {
       return;
     }
-    console.log("sealed counter value", sealedCounterValue);
 
-    // Unseal value before displaying it.
+    // Unseal value before displaying it if necessary.
     const clearedValue = unsealValue(deployedContractData?.address, sealedCounterValue);
 
     // @todo: Use bigint for large values.
@@ -107,7 +152,7 @@ const CounterForm = () => {
         <p>Counter demo</p>
       </div>
 
-      {(isTotalCounterLoading || isAddValueLoading) && <div>Loading</div>}
+      {isTotalCounterLoading && <div>Loading</div>}
 
       <div className="p-2">{counterValue || 0}</div>
 
@@ -121,19 +166,15 @@ const CounterForm = () => {
             <IntegerInput
               value={newValue}
               onChange={updatedTxValue => {
-                setDisplayedTxResult(undefined);
                 setNewValue(updatedTxValue);
               }}
               placeholder="number"
               disableMultiplyBy1e18={true}
+              disabled={isAddValueLoading}
             />
           </div>
 
           <div className="flex justify-between gap-2">
-            <div className="flex-grow basis-0">
-              {displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}
-            </div>
-
             <div
               className={`flex ${
                 writeDisabled &&
@@ -152,11 +193,6 @@ const CounterForm = () => {
             </div>
           </div>
         </div>
-        {txResult ? (
-          <div className="flex-grow basis-0">
-            <TxReceipt txResult={txResult} />
-          </div>
-        ) : null}
       </div>
     </div>
   );
