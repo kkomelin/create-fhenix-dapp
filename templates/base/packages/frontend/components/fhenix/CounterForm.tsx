@@ -75,10 +75,10 @@ const CounterForm = () => {
     // @todo: Load proper types for the contract.
     const contractWithSigner = contract.connect(signer); // as Counter;
 
-    const encryptedAmount = await encryptNumber(amount);
+    const encryptedNumber = await encryptNumber(amount);
 
-    const tx = await contractWithSigner.add(encryptedAmount);
-    return await tx.wait();
+    const tx = await contractWithSigner.add(encryptedNumber);
+    await tx.wait();
   }
 
   const handleWrite = async () => {
