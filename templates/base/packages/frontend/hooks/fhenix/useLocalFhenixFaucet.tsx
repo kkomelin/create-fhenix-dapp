@@ -53,12 +53,11 @@ export const useLocalFhenixFaucet = (_walletClient?: WalletClient): RequestFunc 
         },
       );
 
-      const json = await fetchResult.json();
-
-      if (json.error != null) {
-        notification.error(json.error);
-        throw new Error(json.error);
-      }
+      // @fixme Find the reason of why the server responds with wrong request and once it's fixed, process the response properly.
+      // const json = await fetchResult.json();
+      // if (json.error != null) {
+      //   throw new Error(json);
+      // }
 
       notification.remove(notificationId);
 
