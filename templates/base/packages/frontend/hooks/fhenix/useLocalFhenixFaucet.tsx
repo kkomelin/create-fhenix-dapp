@@ -35,7 +35,7 @@ export const useLocalFhenixFaucet = (_walletClient?: WalletClient): RequestFunc 
       return;
     }
 
-    let notificationId = notification.loading(<RequestNotification message="Waiting for funds to arrive" />);
+    let notificationId = notification.loading(<RequestNotification message="Requesting funds from the faucet" />);
 
     let faucetResult = "";
 
@@ -61,9 +61,12 @@ export const useLocalFhenixFaucet = (_walletClient?: WalletClient): RequestFunc 
 
       notification.remove(notificationId);
 
-      notification.success(<RequestNotification message="Funds arrived successfully" />, {
-        icon: "🎉",
-      });
+      notification.success(
+        <RequestNotification message="Funds arrived successfully. Wait for a few more seconds for the interface to update." />,
+        {
+          icon: "🎉",
+        },
+      );
     } catch (error: any) {
       if (notificationId) {
         notification.remove(notificationId);

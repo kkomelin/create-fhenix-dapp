@@ -82,18 +82,27 @@ const CounterForm = () => {
   }
 
   const handleWrite = async () => {
-    if (addValue) {
-      try {
-        // const encryptedNumber = await encryptNumber(Number(newValue));
-        // console.log(encryptedNumber);
-        setIsAddValueLoading(true);
-        // () => addValue({ args: [encryptedNumber] });
-        return await writeTxn(() => addValue(Number(newValue)));
-      } catch (e: any) {
-        console.error("⚡️ ~ file: CounterForm.tsx:handleWrite ~ error", e);
-      } finally {
-        setIsAddValueLoading(false);
-      }
+    if (addValue == null) {
+      return;
+    }
+
+    const value = Number(newValue);
+
+    if (value === 0) {
+      notification.warning("The value should not be 0");
+      return;
+    }
+
+    try {
+      // const encryptedNumber = await encryptNumber(Number(newValue));
+      // console.log(encryptedNumber);
+      setIsAddValueLoading(true);
+      // () => addValue({ args: [encryptedNumber] });
+      await writeTxn(() => addValue(value));
+    } catch (e: any) {
+      console.error("⚡️ ~ file: CounterForm.tsx:handleWrite ~ error", e);
+    } finally {
+      setIsAddValueLoading(false);
     }
   };
 
