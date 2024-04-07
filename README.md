@@ -35,6 +35,8 @@ To get started with Create Fhenix DApp, follow the steps below:
 
 ```
 npx create-fhenix-dapp@latest
+# or
+pnpm create fhenix-dapp
 ```
 
 2. Run a local network in the first terminal:
