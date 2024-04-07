@@ -34,9 +34,7 @@ To get started with Create Fhenix DApp, follow the steps below:
 1. Install from NPM Registry and follow the CLI instructions.
 
 ```
-npx create-fhenix-dapp@latest
-# or
-pnpm create fhenix-dapp
+pnpm create fhenix-dapp@latest
 ```
 
 2. Run a local network in the first terminal:
