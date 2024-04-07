@@ -1,8 +1,9 @@
 import { BeakerIcon } from "@heroicons/react/24/outline";
-import { BrowserProvider, Eip1193Provider, JsonRpcProvider, ethers } from "ethers";
-import { EncryptionTypes, FhenixClient } from "fhenixjs";
-import { useEffect, useRef, useState } from "react";
+import { ethers } from "ethers";
+import { EncryptionTypes } from "fhenixjs";
+import { useState } from "react";
 import { useNetwork } from "wagmi";
+import useFhenix from "~~/hooks/fhenix/useFhenix";
 import { useDeployedContractInfo, useScaffoldContractRead, useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
@@ -12,16 +13,13 @@ const CONTRACT_NAME = "Counter";
 
 const CounterForm = () => {
   const [newValue, setNewValue] = useState<string | bigint>(0n);
-  const [counterValue, setCounterValue] = useState<number>();
-  const fhenixProvider = useRef<JsonRpcProvider | BrowserProvider | null>(null);
-  const fhenixClient = useRef<FhenixClient | null>(null);
   const { chain: connectedChain } = useNetwork();
   const { data: deployedContractData, isLoading: isDeployedContractLoading } = useDeployedContractInfo(CONTRACT_NAME);
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
-  const writeDisabled = !connectedChain || connectedChain?.id !== targetNetwork.id;
+  const { fhenixClient, fhenixProvider } = useFhenix();
 
-  const { data: sealedCounterValue, isLoading: isTotalCounterLoading } = useScaffoldContractRead({
+  const { data: counterValue, isLoading: isTotalCounterLoading } = useScaffoldContractRead({
     contractName: CONTRACT_NAME,
     functionName: "getCounter",
     watch: true,
@@ -52,14 +50,12 @@ const CounterForm = () => {
    * @returns
    */
   async function addValue(amount: number) {
-    const provider = getFhenixProvider();
-    if (provider == null) {
+    if (fhenixProvider == null) {
       notification.error("No provider found");
       throw new Error("No provider found");
     }
 
-    const client = getFhenixClient();
-    if (client == null) {
+    if (fhenixClient == null) {
       notification.error("No FHE client found");
       throw new Error("No FHE client found");
     }
@@ -69,15 +65,16 @@ const CounterForm = () => {
       throw new Error("Cannot find the deployed contract");
     }
 
-    const signer = await provider.getSigner();
+    const signer = await fhenixProvider.getSigner();
 
     const contract = new ethers.Contract(deployedContractData?.address, deployedContractData?.abi, signer);
     // @todo: Load proper types for the contract.
     const contractWithSigner = contract.connect(signer); // as Counter;
 
-    const encryptedNumber = await encryptNumber(amount);
+    // Encrypt numeric value to be passed into the Fhenix-powered contract.
+    const encryptedAmount = await fhenixClient.encrypt(amount, EncryptionTypes.uint8);
 
-    const tx = await contractWithSigner.add(encryptedNumber);
+    const tx = await contractWithSigner.add(encryptedAmount);
     await tx.wait();
   }
 
@@ -87,7 +84,6 @@ const CounterForm = () => {
     }
 
     const value = Number(newValue);
-
     if (value === 0) {
       notification.warning("The value should not be 0");
       return;
@@ -106,53 +102,7 @@ const CounterForm = () => {
     }
   };
 
-  const getFhenixProvider = () => {
-    if (fhenixProvider.current != null) {
-      return fhenixProvider.current;
-    }
-
-    // Initialize the provider.
-    // @todo: Find a way not to use ethers.BrowserProvider because we already have viem and wagmi here.
-    fhenixProvider.current = new BrowserProvider(window.ethereum as Eip1193Provider);
-
-    return fhenixProvider.current;
-  };
-
-  const getFhenixClient = () => {
-    if (fhenixClient.current != null) {
-      return fhenixClient.current;
-    }
-
-    const provider = getFhenixProvider();
-
-    fhenixClient.current = new FhenixClient({ provider });
-    return fhenixClient.current;
-  };
-
-  const encryptNumber = async (value: number) => {
-    const client = getFhenixClient();
-    // Encrypt data for a Fhenix contract.
-    return await client.encrypt(value, EncryptionTypes.uint8);
-  };
-
-  const unsealValue = (contractAddress: string, sealedValue: string) => {
-    // const client = getFhenixClient();
-    // Unseal value before displaying it.
-    // return client.unseal(contractAddress, sealedValue);
-    return sealedValue;
-  };
-
-  useEffect(() => {
-    if (isDeployedContractLoading || deployedContractData?.address == null) {
-      return;
-    }
-
-    // Unseal value before displaying it if necessary.
-    const clearedValue = unsealValue(deployedContractData?.address, sealedCounterValue);
-
-    // @todo: Use bigint for large values.
-    setCounterValue(Number(clearedValue));
-  }, [sealedCounterValue, isDeployedContractLoading]);
+  const writeDisabled = !connectedChain || connectedChain?.id !== targetNetwork.id;
 
   return (
     <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
@@ -174,9 +124,7 @@ const CounterForm = () => {
             </div>
             <IntegerInput
               value={newValue}
-              onChange={updatedTxValue => {
-                setNewValue(updatedTxValue);
-              }}
+              onChange={setNewValue}
               placeholder="number"
               disableMultiplyBy1e18={true}
               disabled={isAddValueLoading}
@@ -196,7 +144,7 @@ const CounterForm = () => {
                 disabled={writeDisabled || isAddValueLoading}
                 onClick={handleWrite}
               >
-                {isAddValueLoading && <span className="loading loading-spinner loading-xs"></span>}
+                {isAddValueLoading && <span className="loading loading-spinner loading-xs" />}
                 Add
               </button>
             </div>
