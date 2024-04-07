@@ -91,7 +91,6 @@ const CounterForm = () => {
 
     try {
       // const encryptedNumber = await encryptNumber(Number(newValue));
-      // console.log(encryptedNumber);
       setIsAddValueLoading(true);
       // () => addValue({ args: [encryptedNumber] });
       await writeTxn(() => addValue(value));
