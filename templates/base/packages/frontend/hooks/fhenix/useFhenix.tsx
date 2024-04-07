@@ -14,8 +14,7 @@ const useFhenix = () => {
     // Initialize the provider.
     // @todo: Find a way not to use ethers.BrowserProvider because we already have viem and wagmi here.
     fhenixProvider.current = new BrowserProvider(window.ethereum as Eip1193Provider);
-
-    return fhenixProvider.current;
+    // fhenixProvider.current = new JsonRpcProvider(connectedChain?.rpcUrls.default.http[0]);
   };
 
   const initFhenixClient = () => {
@@ -23,10 +22,9 @@ const useFhenix = () => {
       return fhenixClient.current;
     }
 
-    const provider = initFhenixProvider();
+    initFhenixProvider();
 
-    fhenixClient.current = new FhenixClient({ provider });
-    return fhenixClient.current;
+    fhenixClient.current = new FhenixClient({ provider: fhenixProvider.current });
   };
 
   useEffect(() => {

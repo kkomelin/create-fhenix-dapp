@@ -25,7 +25,7 @@ export const FaucetButton = () => {
   const [loading, setLoading] = useState(false);
   const faucetRequest = useLocalFhenixFaucet(localWalletClient);
 
-  const sendETH = async () => {    
+  const sendETH = async () => {
     if (!address) {
       return;
     }

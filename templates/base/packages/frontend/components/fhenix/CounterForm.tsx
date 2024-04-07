@@ -1,6 +1,5 @@
 import { BeakerIcon } from "@heroicons/react/24/outline";
 import { ethers } from "ethers";
-import { EncryptionTypes } from "fhenixjs";
 import { useState } from "react";
 import { useNetwork } from "wagmi";
 import useFhenix from "~~/hooks/fhenix/useFhenix";
@@ -14,7 +13,7 @@ const CONTRACT_NAME = "Counter";
 const CounterForm = () => {
   const [newValue, setNewValue] = useState<string | bigint>(0n);
   const { chain: connectedChain } = useNetwork();
-  const { data: deployedContractData, isLoading: isDeployedContractLoading } = useDeployedContractInfo(CONTRACT_NAME);
+  const { data: deployedContractData } = useDeployedContractInfo(CONTRACT_NAME);
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
   const { fhenixClient, fhenixProvider } = useFhenix();
@@ -46,10 +45,10 @@ const CounterForm = () => {
    * @todo: Switch to useScaffoldContractWrite() or such.
    *
    *
-   * @param amount
+   * @param value
    * @returns
    */
-  async function addValue(amount: number) {
+  async function addValue(value: number) {
     if (fhenixProvider == null) {
       notification.error("No provider found");
       throw new Error("No provider found");
@@ -72,10 +71,10 @@ const CounterForm = () => {
     const contractWithSigner = contract.connect(signer); // as Counter;
 
     // Encrypt numeric value to be passed into the Fhenix-powered contract.
-    const encryptedAmount = await fhenixClient.encrypt(amount, EncryptionTypes.uint8);
+    const encryptedValue = await fhenixClient.encrypt_uint8(value);
 
-    const tx = await contractWithSigner.add(encryptedAmount);
-    await tx.wait();
+    const tx = await contractWithSigner.add(encryptedValue);
+    return await tx.wait();
   }
 
   const handleWrite = async () => {
@@ -112,7 +111,7 @@ const CounterForm = () => {
 
       {isTotalCounterLoading && <div>Loading</div>}
 
-      <div className="p-2">{counterValue || 0}</div>
+      <div className="p-2">{Number(counterValue) || 0}</div>
 
       <div className="py-5 space-y-3 first:pt-0 last:pb-1">
         <div className="flex gap-3 flex-col">
