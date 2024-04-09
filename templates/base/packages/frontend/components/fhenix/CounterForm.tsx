@@ -26,21 +26,6 @@ const CounterForm = () => {
 
   const [isAddValueLoading, setIsAddValueLoading] = useState<boolean>(false);
 
-  let addResult = null;
-
-  // const {
-  //   data: addResult,
-  //   writeAsync: addValue,
-  //   isLoading: isAddValueLoading,
-  // } = useScaffoldContractWrite({
-  //   contractName: CONTRACT_NAME,
-  //   functionName: "add",
-  //   blockConfirmations: 1,
-  //   onBlockConfirmation: txnReceipt => {
-  //     console.log("Transaction blockHash", txnReceipt.blockHash);
-  //   },
-  // });
-
   /**
    * @todo: Switch to useScaffoldContractWrite() or such.
    *
@@ -48,7 +33,7 @@ const CounterForm = () => {
    * @param value
    * @returns
    */
-  async function addValue(value: number) {
+  async function addValueEthers(value: number) {
     if (fhenixProvider == null) {
       notification.error("No provider found");
       throw new Error("No provider found");
@@ -77,10 +62,73 @@ const CounterForm = () => {
     return await tx.wait();
   }
 
+  // async function addValueViem(value: number) {
+  //   if (deployedContractData?.address == null) {
+  //     return;
+  //   }
+
+  //   if (fhenixClient == null) {
+  //     return;
+  //   }
+
+  //   const publicClient = createPublicClient({
+  //     chain: fhenixLocal,
+  //     transport: http(),
+  //   });
+
+  //   const walletClient = createWalletClient({
+  //     chain: fhenixLocal,
+  //     transport: custom(window.ethereum!),
+  //   });
+
+  //   const [account] = await walletClient.getAddresses();
+
+  //   const param = await prepareArg(value);
+
+  //   const { request } = await publicClient.simulateContract({
+  //     account,
+  //     address: deployedContractData?.address,
+  //     abi: deployedContractData?.abi,
+  //     functionName: "add",
+  //     args: [param],
+  //   });
+  //   return await walletClient.writeContract(request);
+  // }
+
+  // const prepareArg = async (value: number) => {
+  //   if (fhenixClient == null) {
+  //     notification.error("No FHE client found");
+  //     throw new Error("No FHE client found");
+  //   }
+
+  //   // Encrypt numeric value to be passed into the Fhenix-powered contract.
+  //   const encryptedValue = await fhenixClient.encrypt_uint8(value);
+
+  //   const param: any = {
+  //     ...encryptedValue,
+  //     data: ethers.toQuantity(encryptedValue.data),
+  //   };
+
+  //   return param;
+  // };
+
+  // const {
+  //   data: addResult,
+  //   writeAsync: addValueScaffold,
+  //   isLoading: isAddValueScaffoldLoading,
+  // } = useScaffoldContractWrite({
+  //   contractName: CONTRACT_NAME,
+  //   functionName: "add",
+  //   blockConfirmations: 1,
+  //   onBlockConfirmation: txnReceipt => {
+  //     console.log("Transaction blockHash", txnReceipt.blockHash);
+  //   },
+  // });
+
   const handleWrite = async () => {
-    if (addValue == null) {
-      return;
-    }
+    // if (addValueScaffold == null) {
+    //   return;
+    // }
 
     const value = Number(newValue);
     if (value === 0) {
@@ -89,10 +137,10 @@ const CounterForm = () => {
     }
 
     try {
-      // const encryptedNumber = await encryptNumber(Number(newValue));
       setIsAddValueLoading(true);
-      // () => addValue({ args: [encryptedNumber] });
-      await writeTxn(() => addValue(value));
+      await writeTxn(() => addValueEthers(value));
+      // await writeTxn(() => addValueViem(value));
+      // await writeTxn(async () => addValueScaffold({ args: [await prepareArg(value)] }));
     } catch (e: any) {
       console.error("⚡️ ~ file: CounterForm.tsx:handleWrite ~ error", e);
     } finally {
