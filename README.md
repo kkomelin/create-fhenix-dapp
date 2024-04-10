@@ -83,7 +83,7 @@ pnpm chain:stop
 
 - Tweak the app config in `packages/frontend/scaffold.config.ts`.
 - Edit the demo smart contract: `packages/backend/contracts/Counter.sol`
-- Edit your frontend in `packages/frontend/pages`
+- Edit your frontend in `packages/frontend/app`
 - Edit your deployment scripts: `packages/backend/deploy`
 
 ## Documentation
