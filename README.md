@@ -17,7 +17,7 @@ It's designed to make it easier for developers to create and deploy smart contra
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum/Fhenix network.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+![Frontpage](https://repository-images.githubusercontent.com/779264860/cda636d8-9cc6-4e7e-973d-fde96d1df9c4)
 
 ## Requirements
 
