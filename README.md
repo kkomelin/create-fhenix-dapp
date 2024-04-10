@@ -17,7 +17,7 @@ It's designed to make it easier for developers to create and deploy smart contra
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum/Fhenix network.
 
-![Frontpage](https://repository-images.githubusercontent.com/779264860/cda636d8-9cc6-4e7e-973d-fde96d1df9c4)
+![Frontpage](https://repository-images.githubusercontent.com/779264860/2d138d41-f588-4bf3-8d7b-50ac1b3af382)
 
 ## Requirements
 
