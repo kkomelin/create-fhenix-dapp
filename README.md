@@ -93,12 +93,6 @@ pnpm chain:stop
 -  <a href="https://docs.fhenix.zone/docs/devdocs/intro">Fhenix Documentation</a>
 -  <a href="https://docs.scaffoldeth.io">Scaffold ETH Documentation</a>
 
-## Known issues
-
-- [ ] Fix issue: frontend: Cannot write to the counter demo contract through Ethers.js: `Error: could not coalesce error (error={ "code": -32603, "message": "Internal JSON-RPC error." }, payload={ "id": 10, "jsonrpc": "2.0", "method": "eth_sendTransaction", "params": [ { "data": "0x859fc54200000000000000000000000`
-- [ ] Fix issue: backend: `pnpm prepare$ install-self-peers -- --ignore-scripts│  ERR_PNPM_MISSING_PACKAGE_NAME  pnpm add requires the package name`
-- [ ] Fix issue: package.json files of the scaffolded instance are minimized for some reason
-
 ## Extend/develop this project
 
 Check out [Wiki](https://github.com/kkomelin/create-fhenix-dapp/wiki)
