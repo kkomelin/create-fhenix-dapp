@@ -1,6 +1,6 @@
 {
   "name": "create-fhenix-dapp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Create Fhenix DApp",
   "repository": {
     "type": "git",
@@ -53,7 +53,7 @@
     "listr": "0.14.3",
     "merge-packages": "^0.1.6",
     "ncp": "2.0.0",
-    "pkg-install": "kkomelin/pkg-install"
+    "pkg-install": "https://github.com/kkomelin/pkg-install.git"
   },
-  "packageManager": "pnpm@8:15:4"
+  "packageManager": "pnpm@9.0.5"
 }

@@ -20,12 +20,12 @@
     "vercel": "vercel",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },
-  "packageManager": "pnpm@8:15:4",
+  "packageManager": "pnpm@9.0.5",
   "devDependencies": {
     "husky": "~8.0.3",
     "lint-staged": "~13.2.2",
     "next": "~14.0.4",
     "vercel": "~32.4.1",
-    "install-self-peers": "kkomelin/install-self-peers"
+    "install-self-peers": "https://github.com/kkomelin/install-self-peers.git"
   }
 }
