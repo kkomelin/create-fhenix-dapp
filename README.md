@@ -11,7 +11,7 @@ It's designed to make it easier for developers to create and deploy smart contra
 
 ⚙️ Built using Scaffold ETH, Next.js, RainbowKit, Hardhat, Wagmi, Viem, Ethers.js, Fhenixjs, and Typescript.
 
-_Started at [ETHSeoul](https://devfolio.co/projects/createfhenixapp-af32). Won 2d prize from Fhenix and 3d prize from BuidlGuidl.eth._
+_Started at [ETHSeoul](https://devfolio.co/projects/createfhenixapp-af32), where won 2d prize from [Fhenix](https://www.fhenix.io/) and 3d prize from [BuidlGuidl](https://buidlguidl.com/)._
 
 ## Features
 
