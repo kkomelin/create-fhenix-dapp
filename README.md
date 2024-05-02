@@ -11,6 +11,10 @@ It's designed to make it easier for developers to create and deploy smart contra
 
 ⚙️ Built using Scaffold ETH, Next.js, RainbowKit, Hardhat, Wagmi, Viem, Ethers.js, Fhenixjs, and Typescript.
 
+_Started at [ETHSeoul](https://devfolio.co/projects/createfhenixapp-af32). Won 2d prize from Fhenix and 3d prize from BuidlGuidl.eth._
+
+## Features
+
 - ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
 - 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
 - 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
